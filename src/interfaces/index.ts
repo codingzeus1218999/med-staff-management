@@ -9,6 +9,5 @@ export interface IStaff {
 }
 
 export interface IState {
-  doctors: IStaff[];
-  nurses: IStaff[];
+  staffs: IStaff[];
 }

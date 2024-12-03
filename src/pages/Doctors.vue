@@ -7,86 +7,30 @@
       <div style="width: 150px">Department</div>
       <div class="flex-1">Action</div>
     </div>
-    <div class="flex items-center gap-2" style="height: 40px">
-      <div style="width: 50px">#</div>
-      <div style="width: 200px">
-        <input v-model="newDoctor.name" class="alex-input" />
-      </div>
-      <div style="width: 100px">
-        <select v-model="newDoctor.role">
-          <option :value="EStaffRole.Head">
-            {{ EStaffRole.Head }}
-          </option>
-          <option :value="EStaffRole.Doctor">
-            {{ EStaffRole.Doctor }}
-          </option>
-        </select>
-      </div>
-      <div style="width: 150px">
-        <select v-model="newDoctor.department">
-          <option :value="EStaffDepartment.Cardiology">
-            {{ EStaffDepartment.Cardiology }}
-          </option>
-          <option :value="EStaffDepartment.Surgery">
-            {{ EStaffDepartment.Surgery }}
-          </option>
-        </select>
-      </div>
-      <div class="flex-1 flex gap-4">
-        <div class="alex-btn-icon alex-btn-icon-base" @click="addDoctor">
-          <FontAwesomeIcon :icon="faAdd" />
-        </div>
-        <div class="alex-btn-icon alex-btn-icon-danger" @click="clearForm">
-          <FontAwesomeIcon :icon="faMultiply" />
-        </div>
-      </div>
-    </div>
-    <Doctor
+    <AddStaff :type="EStaffType.Doctor" />
+    <Staff
       v-for="(d, index) in doctors"
       :key="index"
-      :doctor="d"
+      :staff="d"
       :index="index + 1"
+      :type="EStaffType.Doctor"
     />
   </DefaultLayout>
 </template>
 
 <script setup lang="ts">
-import DefaultLayout from "../layouts/DefaultLayout.vue";
-import Doctor from "../components/Doctor.vue";
-import { computed, reactive } from "vue";
 import { useStore } from "vuex";
-import { IStaff } from "../interfaces";
-import { EStaffDepartment, EStaffRole, EStaffType } from "../interfaces/enums";
-import { faAdd, faMultiply } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { useToast } from "vue-toast-notification";
+import { computed } from "vue";
+import "vue-toast-notification/dist/theme-sugar.css";
+import DefaultLayout from "../layouts/DefaultLayout.vue";
+import AddStaff from "../components/AddStaff.vue";
+import Staff from "../components/Staff.vue";
+import { EStaffType } from "../interfaces/enums";
 
 const $store = useStore();
-const $toast = useToast();
-const doctors = computed(() => $store.state.doctors);
-const newDoctor: IStaff = reactive({
-  id: 123,
-  name: "",
-  role: EStaffRole.Doctor,
-  department: EStaffDepartment.Cardiology,
-  type: EStaffType.Doctor,
-});
-const clearForm = () => {
-  newDoctor.id = 123;
-  newDoctor.name = "";
-  newDoctor.role = EStaffRole.Doctor;
-  newDoctor.department = EStaffDepartment.Cardiology;
-  newDoctor.type = EStaffType.Doctor;
-};
-const addDoctor = () => {
-  if (newDoctor.name.trim() === "") {
-    $toast.error("You must fill name field");
-    return;
-  }
-  $store.dispatch("addDoctor", { ...newDoctor });
-  $toast.success("Doctor added successfully!");
-  clearForm();
-};
+const doctors = computed(() =>
+  $store.state.staffs.filter((s) => s.type === EStaffType.Doctor)
+);
 </script>
 
 <style lang="scss" scoped></style>
