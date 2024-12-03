@@ -26,10 +26,11 @@ import DefaultLayout from "../layouts/DefaultLayout.vue";
 import AddStaff from "../components/AddStaff.vue";
 import Staff from "../components/Staff.vue";
 import { EStaffType } from "../interfaces/enums";
+import { IStaff } from "../interfaces";
 
 const $store = useStore();
 const doctors = computed(() =>
-  $store.state.staffs.filter((s) => s.type === EStaffType.Doctor)
+  $store.state.staffs.filter((s: IStaff) => s.type === EStaffType.Doctor)
 );
 </script>
 

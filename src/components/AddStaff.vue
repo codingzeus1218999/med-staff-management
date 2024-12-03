@@ -51,8 +51,11 @@ const props = defineProps<{
 }>();
 const newId = ref(0);
 
-watch($store.state.staffs, async (newV, oldV) => {
-  newId.value = newV.reduce((max, s) => (s.id > max ? s.id : max), 0);
+watch($store.state.staffs, async (newV, _) => {
+  newId.value = newV.reduce(
+    (max: number, s: IStaff) => (s.id > max ? s.id : max),
+    0
+  );
 });
 
 const newStaff: IStaff = reactive({
